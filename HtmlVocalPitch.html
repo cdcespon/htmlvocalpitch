@@ -427,6 +427,7 @@
             </button>
             <button class="btn" id="btnClear">Limpiar</button>
             <button class="btn" id="btnDemo" title="Modo demo sin necesidad de micrófono">Simular Voz</button>
+            <button class="btn" id="btnAbout" title="Acerca de">ℹ️ Acerca de</button>
         </div>
     </header>
 
@@ -485,6 +486,21 @@
                         Probar con Modo Demostración
                     </button>
                 </div>
+                <p style="margin-top: 16px; font-size: 13px; color: var(--text-secondary); text-align: center; border-top: 1px solid var(--border-color); padding-top: 12px;">
+                    Desarrollado por <strong>Victoria Cespón</strong> y <strong>Claudio Cespón</strong> para estudiantes o entusiastas del arte de cantar.
+                </p>
+            </div>
+        </div>
+
+        <div class="mic-prompt-overlay hidden" id="aboutModal">
+            <div class="prompt-card" style="text-align: center;">
+                <h2 style="color: var(--accent-cyan);">Acerca de HtmlVocalPitch</h2>
+                <p style="margin: 18px 0; font-size: 16px; line-height: 1.6; color: var(--text-primary);">
+                    Desarrollado por <strong>Victoria Cespón</strong> y <strong>Claudio Cespón</strong> para estudiantes o entusiastas del arte de cantar.
+                </p>
+                <button class="btn btn-large" id="btnCloseAbout" style="width: 100%; justify-content: center;">
+                    Cerrar
+                </button>
             </div>
         </div>
     </div>
@@ -1057,6 +1073,24 @@
         btnStartDemoPrompt.addEventListener('click', () => {
             btnDemo.click();
         });
+
+        const btnAbout = document.getElementById('btnAbout');
+        const aboutModal = document.getElementById('aboutModal');
+        const btnCloseAbout = document.getElementById('btnCloseAbout');
+
+        if (btnAbout && aboutModal && btnCloseAbout) {
+            btnAbout.addEventListener('click', () => {
+                aboutModal.classList.remove('hidden');
+            });
+            btnCloseAbout.addEventListener('click', () => {
+                aboutModal.classList.add('hidden');
+            });
+            aboutModal.addEventListener('click', (e) => {
+                if (e.target === aboutModal) {
+                    aboutModal.classList.add('hidden');
+                }
+            });
+        }
 
         octaveRangeSelect.addEventListener('change', (e) => {
             const parts = e.target.value.split('-').map(Number);

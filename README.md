@@ -1,4 +1,4 @@
-﻿# 🎙️ HtmlVocalPitch — Monitor de Afinación Vocal en Tiempo Real
+# 🎙️ HtmlVocalPitch — Monitor de Afinación Vocal en Tiempo Real
 
 > Monitor de tono y afinador vocal continuo en tiempo real, 100% autónomo en HTML5, CSS3 y Web Audio API puro (sin librerías externas ni dependencias).
 
@@ -80,6 +80,12 @@ Dado que es un archivo 100% autocontenido, no necesitas compilar nada:
 - **CSS3** (Tema oscuro profesional, diseño adaptativo y variables modernas).
 - **JavaScript Vanilla (ES6+)** (Sin librerías ni frameworks pesados).
 - **Web Audio API** (AudioContext, AnalyserNode, BiquadFilterNode).
+
+---
+
+## ℹ️ Acerca de / About
+
+> Desarrollado por **Victoria Cespón** y **Claudio Cespón** para estudiantes o entusiastas del arte de cantar.
 
 ---
 
