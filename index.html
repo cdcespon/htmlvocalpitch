@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Vocal Pitch Monitor - Clone Pro</title>
+    <title>HtmlVocalPitch - Monitor Vocal de Afinación</title>
     <style>
         :root {
             --bg-main: #0c0e12;
             --bg-panel: #15181f;
             --bg-card: #1e232d;
             --accent-cyan: #00e5ff;
+            --accent-glow: rgba(0, 229, 255, 0.5);
+            --theme-badge: linear-gradient(135deg, #00b4d8, #0077b6);
+            --theme-shadow: rgba(0, 180, 216, 0.4);
             --accent-green: #00e676;
             --accent-yellow: #ffd600;
             --accent-red: #ff3d00;
@@ -57,13 +60,14 @@
         }
 
         .logo-badge {
-            background: linear-gradient(135deg, #00b4d8, #0077b6);
+            background: var(--theme-badge);
             color: #fff;
             font-weight: 900;
             font-size: 13px;
             padding: 4px 8px;
             border-radius: 6px;
-            box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+            box-shadow: 0 0 10px var(--theme-shadow);
+            transition: all 0.3s ease;
         }
 
         .app-name {
@@ -390,8 +394,8 @@
     <!-- CABECERA -->
     <header>
         <div class="header-title">
-            <span class="logo-badge">PITCH</span>
-            <span class="app-name">Vocal Pitch Monitor</span>
+            <span class="logo-badge">HVP</span>
+            <span class="app-name">HtmlVocalPitch</span>
         </div>
 
         <!-- DASHBOARD DE AFINACIÓN -->
@@ -444,6 +448,18 @@
         </div>
 
         <div class="tool-item">
+            <label>Color / Tema:</label>
+            <select id="themeSelect">
+                <option value="cyan">Cyan Neón (Original)</option>
+                <option value="emerald">Esmeralda Neón</option>
+                <option value="purple">Púrpura Eléctrico</option>
+                <option value="amber">Ámbar Dorado</option>
+                <option value="coral">Coral / Rubí</option>
+                <option value="matrix">Verde Matrix</option>
+            </select>
+        </div>
+
+        <div class="tool-item">
             <label>Umbral Ruido:</label>
             <input type="range" id="sensitivitySlider" min="0.005" max="0.06" step="0.002" value="0.015">
         </div>
@@ -476,8 +492,8 @@
 
         <div class="mic-prompt-overlay" id="micPromptOverlay">
             <div class="prompt-card">
-                <h2>Vocal Pitch Monitor Clone</h2>
-                <p>Monitor de afinación vocal en tiempo real idéntico al original. Detección continua de frecuencia, afinador con centésimas, piano roll interactivo y trazado luminoso de tono.</p>
+                <h2>HtmlVocalPitch</h2>
+                <p>Monitor de afinación vocal en tiempo real. Detección continua de frecuencia, afinador con centésimas, piano roll interactivo y trazado luminoso de tono.</p>
                 <button class="btn btn-mic btn-large" id="btnStartPrompt">
                     Comenzar con Micrófono
                 </button>
@@ -525,8 +541,85 @@
             minMidi: 36, // C2
             maxMidi: 83, // B5
             history: [],
-            maxHistoryPoints: 2000
+            maxHistoryPoints: 2000,
+            themeKey: 'cyan',
+            currentTheme: null
         };
+
+        const THEMES = {
+            cyan: {
+                primary: '#00e5ff',
+                glow: 'rgba(0, 229, 255, 0.5)',
+                glowLine: 'rgba(0, 229, 255, 0.22)',
+                glowC: 'rgba(0, 229, 255, 0.28)',
+                cursor: 'rgba(0, 229, 255, 0.45)',
+                badge: 'linear-gradient(135deg, #00b4d8, #0077b6)',
+                shadow: 'rgba(0, 180, 216, 0.4)'
+            },
+            emerald: {
+                primary: '#00e676',
+                glow: 'rgba(0, 230, 118, 0.5)',
+                glowLine: 'rgba(0, 230, 118, 0.22)',
+                glowC: 'rgba(0, 230, 118, 0.28)',
+                cursor: 'rgba(0, 230, 118, 0.45)',
+                badge: 'linear-gradient(135deg, #00c853, #1b5e20)',
+                shadow: 'rgba(0, 200, 83, 0.4)'
+            },
+            purple: {
+                primary: '#e040fb',
+                glow: 'rgba(224, 64, 251, 0.5)',
+                glowLine: 'rgba(224, 64, 251, 0.22)',
+                glowC: 'rgba(224, 64, 251, 0.28)',
+                cursor: 'rgba(224, 64, 251, 0.45)',
+                badge: 'linear-gradient(135deg, #aa00ff, #4a148c)',
+                shadow: 'rgba(170, 0, 255, 0.4)'
+            },
+            amber: {
+                primary: '#ffd600',
+                glow: 'rgba(255, 214, 0, 0.5)',
+                glowLine: 'rgba(255, 214, 0, 0.22)',
+                glowC: 'rgba(255, 214, 0, 0.28)',
+                cursor: 'rgba(255, 214, 0, 0.45)',
+                badge: 'linear-gradient(135deg, #ffab00, #ff6d00)',
+                shadow: 'rgba(255, 171, 0, 0.4)'
+            },
+            coral: {
+                primary: '#ff3d00',
+                glow: 'rgba(255, 61, 0, 0.5)',
+                glowLine: 'rgba(255, 61, 0, 0.22)',
+                glowC: 'rgba(255, 61, 0, 0.28)',
+                cursor: 'rgba(255, 61, 0, 0.45)',
+                badge: 'linear-gradient(135deg, #f50057, #c51162)',
+                shadow: 'rgba(245, 0, 87, 0.4)'
+            },
+            matrix: {
+                primary: '#76ff03',
+                glow: 'rgba(118, 255, 3, 0.5)',
+                glowLine: 'rgba(118, 255, 3, 0.22)',
+                glowC: 'rgba(118, 255, 3, 0.28)',
+                cursor: 'rgba(118, 255, 3, 0.45)',
+                badge: 'linear-gradient(135deg, #64dd17, #33691e)',
+                shadow: 'rgba(100, 221, 23, 0.4)'
+            }
+        };
+
+        function applyTheme(themeKey) {
+            const t = THEMES[themeKey] || THEMES.cyan;
+            state.themeKey = themeKey;
+            state.currentTheme = t;
+            document.documentElement.style.setProperty('--accent-cyan', t.primary);
+            document.documentElement.style.setProperty('--accent-glow', t.glow);
+            document.documentElement.style.setProperty('--theme-badge', t.badge);
+            document.documentElement.style.setProperty('--theme-shadow', t.shadow);
+            try {
+                localStorage.setItem('htmlvocalpitch_theme', themeKey);
+            } catch (e) {}
+            const sel = document.getElementById('themeSelect');
+            if (sel && sel.value !== themeKey) {
+                sel.value = themeKey;
+            }
+        }
+        applyTheme('cyan');
 
         const liveNoteEl = document.getElementById('liveNote');
         const liveOctaveEl = document.getElementById('liveOctave');
@@ -539,6 +632,7 @@
         const pauseLabel = document.getElementById('pauseLabel');
         const btnClear = document.getElementById('btnClear');
         const btnDemo = document.getElementById('btnDemo');
+        const themeSelect = document.getElementById('themeSelect');
         const octaveRangeSelect = document.getElementById('octaveRangeSelect');
         const sensitivitySlider = document.getElementById('sensitivitySlider');
         const notationSelect = document.getElementById('notationSelect');
@@ -786,7 +880,7 @@
                 }
 
                 canvasCtx.beginPath();
-                canvasCtx.strokeStyle = isC ? 'rgba(0, 229, 255, 0.28)' : 'rgba(255, 255, 255, 0.05)';
+                canvasCtx.strokeStyle = isC ? state.currentTheme.glowC : 'rgba(255, 255, 255, 0.05)';
                 canvasCtx.lineWidth = isC ? 1.5 : 1;
                 canvasCtx.moveTo(0, y);
                 canvasCtx.lineTo(width, y);
@@ -827,31 +921,31 @@
                         if (midiDiff <= 5) {
                             const y1 = ((state.maxMidi - p1.midi) / totalNotes) * height + (noteHeight / 2);
 
-                            // Resplandor exterior
+                            // Resplandor exterior dinámico
                             canvasCtx.beginPath();
-                            canvasCtx.strokeStyle = 'rgba(0, 229, 255, 0.2)';
+                            canvasCtx.strokeStyle = state.currentTheme.glowLine;
                             canvasCtx.lineWidth = 7;
                             canvasCtx.moveTo(x1, y1);
                             canvasCtx.lineTo(x2, y2);
                             canvasCtx.stroke();
 
-                            // Trazo central nítido
+                            // Trazo central nítido dinámico
                             canvasCtx.beginPath();
-                            canvasCtx.strokeStyle = '#00e5ff';
+                            canvasCtx.strokeStyle = state.currentTheme.primary;
                             canvasCtx.lineWidth = 2.5;
                             canvasCtx.moveTo(x1, y1);
                             canvasCtx.lineTo(x2, y2);
                             canvasCtx.stroke();
                         } else {
                             // Punto de inicio de nueva nota
-                            canvasCtx.fillStyle = '#00e5ff';
+                            canvasCtx.fillStyle = state.currentTheme.primary;
                             canvasCtx.beginPath();
                             canvasCtx.arc(x2, y2, 2.5, 0, Math.PI * 2);
                             canvasCtx.fill();
                         }
                     } else if (p2.midi !== null) {
                         const y2 = ((state.maxMidi - p2.midi) / totalNotes) * height + (noteHeight / 2);
-                        canvasCtx.fillStyle = '#00e5ff';
+                        canvasCtx.fillStyle = state.currentTheme.primary;
                         canvasCtx.beginPath();
                         canvasCtx.arc(x2, y2, 2.5, 0, Math.PI * 2);
                         canvasCtx.fill();
@@ -859,7 +953,7 @@
                 }
             }
 
-            canvasCtx.strokeStyle = 'rgba(0, 229, 255, 0.4)';
+            canvasCtx.strokeStyle = state.currentTheme.cursor;
             canvasCtx.setLineDash([4, 4]);
             canvasCtx.beginPath();
             canvasCtx.moveTo(width - 2, 0);
@@ -1113,11 +1207,23 @@
             state.scrollSpeed = parseFloat(e.target.value);
         });
 
+        themeSelect.addEventListener('change', (e) => {
+            applyTheme(e.target.value);
+            renderCanvas();
+        });
+
         window.addEventListener('resize', () => {
             renderCanvas();
         });
 
         // Inicialización
+        try {
+            const savedTheme = localStorage.getItem('htmlvocalpitch_theme');
+            if (savedTheme && THEMES[savedTheme]) {
+                applyTheme(savedTheme);
+            }
+        } catch (e) {}
+
         buildPianoRoll();
         if (new URLSearchParams(window.location.search).has('demo')) {
             btnDemo.click();

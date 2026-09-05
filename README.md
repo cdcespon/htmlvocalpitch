@@ -10,7 +10,7 @@
 
 ## 📸 Captura de Pantalla
 
-![Vocal Pitch Monitor en Acción](assets/real_usage.png)
+![HtmlVocalPitch en Acción](assets/real_usage.png)
 
 ---
 
@@ -33,6 +33,8 @@ Accede inmediatamente desde cualquier dispositivo sin instalar nada:
   - Representación visual intuitiva de las notas de la escala musical.
   - Teclas interactivas: haz clic en cualquier tecla para escuchar su tono de referencia.
   - Selección de rangos vocales: Estándar (C2 - B5), Voces Agudas (C3 - B6), Voces Graves (C1 - B4) o Completo (C2 - B6).
+- **🎨 Paletas de Color Personalizables**:
+  - Selector de temas visuales (Cyan Neón, Esmeralda Neón, Púrpura Eléctrico, Ámbar Dorado, Coral y Verde Matrix) con persistencia automática en el navegador.
 - **🎼 Afinador en Centésimas (Cents Meter)**:
   - Muestra la nota actual, la octava y los cents de desviación en tiempo real.
   - Aguja dinámica con feedback de color:
